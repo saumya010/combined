@@ -16,7 +16,7 @@ function asc_enqueue_style(){
    wp_enqueue_style( 'style',plugins_url( 'style.css', __FILE__ ) );
 }
 add_action('wp_enqueue_scripts', 'asc_enqueue_style');
-function ab_get_author_list($col,$noauth,$exc){
+function ab_get_author_list($noauth,$exc){
     wp_list_authors(array('number'=>$noauth,'exclude'=>$exc));
 }
 function catch_that_image() {
@@ -88,7 +88,11 @@ include 'feature_posts.php';
 include 'popular-post-stat-widget.php';
 include 'recent_posts.php';
 include 'recents.php';
+include 'author_list.php';
+include 'author_bio_widget.php';
 add_action('widgets_init',create_function('', 'return register_widget("Recent_Comments");'));
 add_action('widgets_init',create_function('', 'return register_widget("Featured_Posts");'));
 add_action('widgets_init',create_function('', 'return register_widget("Post_Stats_Counter");'));
 add_action('widgets_init',create_function('', 'return register_widget("Recent_Posts");'));
+add_action('widgets_init',create_function('', 'return register_widget("Author_List");'));
+add_action('widgets_init',create_function('', 'return register_widget("Author_Bio");'));
