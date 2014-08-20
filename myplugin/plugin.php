@@ -33,8 +33,7 @@ function catch_that_image() {
   		}
   		return $first_img;
 }
-function display_featured_image(){
-    
+function display_featured_image(){    
     global $post;
     $post_id=$post->ID;
     if ( has_post_thumbnail($post_id) ) {
@@ -42,10 +41,9 @@ function display_featured_image(){
         }
         else {
             echo '<img src="';
-            echo catch_that_featured_image();
+            echo catch_that_image();
             echo '" alt="Unable to load" width="100px" height="100px" class="featuredImage" />';
-        }
-    
+        }    
 }
 function display_post_author_name(){
     global $post;

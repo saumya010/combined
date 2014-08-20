@@ -4,7 +4,7 @@ class Author_Bio extends WP_Widget {
     protected $defaults;
     function __construct() {
         $this->defaults = array(
-			'title'          => '',
+			'title'          => 'Author Details',
 			'alignment'	 => 'left',
 			'user'           => '',
 			'size'           => '45',
@@ -31,6 +31,7 @@ function widget($args, $instance) {
     extract ($args);
     $instance = wp_parse_args((array) $instance, $this->defaults); 
         echo $before_widget;
+        echo "<div class='author_bio'>";
             if ( $instance['title'] ){
                 echo "<h3 class='widget-title'>".$instance['title']."</h3>";
             }
@@ -42,15 +43,16 @@ function widget($args, $instance) {
             if($instance['alignment'])
                 $text.='</span>';
             if($instance['sort_radiobox']=="bio")
-                $text.=get_the_author_meta('description',$instance['user']);
+                $text.="<div class='details'>".get_the_author_meta('description',$instance['user']);
             else
                 $text.=$instance['text-bio'];
             $text .= $instance['page'] ? sprintf( ' <a class="pagelink" href="%s">%s</a>', get_page_link( $instance['page'] ), $instance['page_link_text'] ) : '';
             echo wpautop($text);
             if ( $instance['posts_link'] )
-		printf( '<div class="posts_link posts-link"><a href="%s">%s</a></div>', get_author_posts_url( $instance['user'] ), __( 'View My Blog Posts', 'genesis' ) );
+		printf( '<div class="posts-link"><a href="%s">%s</a></div>', get_author_posts_url( $instance['user'] ), __( 'View My Blog Posts', 'genesis' ) );
+            echo "</div></div>";
             echo $after_widget;                      
-	}
+}
 function form($instance) {
 	$instance = wp_parse_args( (array) $instance, $this->defaults );  ?>
 	<p>
@@ -77,7 +79,6 @@ function form($instance) {
                 <select id="<?php echo $this->get_field_id( 'alignment' ); ?>" name="<?php echo $this->get_field_name( 'alignment' ); ?>">
                 <option value="">- <?php _e( 'None', 'genesis' ); ?> -</option>
                 <option value="left" <?php selected( 'left', $instance['alignment'] ); ?>><?php _e( 'Left', 'genesis' ); ?></option>
-                <option value="center" <?php selected( 'center', $instance['alignment'] ); ?>><?php _e( 'Center', 'genesis' ); ?></option>
                 <option value="right" <?php selected( 'right', $instance['alignment'] ); ?>><?php _e( 'Right', 'genesis' ); ?></option>
                 </select>
         </p>

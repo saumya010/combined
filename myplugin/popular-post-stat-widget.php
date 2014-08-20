@@ -27,7 +27,7 @@ function form($instance) {
 	</p>
         <p>
 		<label for="<?php echo $this->get_field_id('post_count'); ?>"><?php _e('Number of Posts:', 'wp_widget_plugin'); ?></label>
-                <input class="widefat" id="<?php echo $this->get_field_id('post_count'); ?>" name="<?php echo $this->get_field_name('post_count'); ?>" value="<?php echo $instance['post_count']; ?>" type="number" >
+                <input class="widefat" id="<?php echo $this->get_field_id('post_count'); ?>" name="<?php echo $this->get_field_name('post_count'); ?>" value="<?php echo $post_count; ?>" type="number" >
 	</p>
         <p>
             <input type="radio" id="<?php echo $this->get_field_id('radio_btn'); ?>" 
@@ -49,6 +49,10 @@ function form($instance) {
                 <label for="<?php echo $this->get_field_id('post-date'); ?>">Display Post Date</label>
         </p>
         <p>
+                <input class="checkbox" type="checkbox" <?php checked($instance['post-author'], 'on'); ?> id="<?php echo $this->get_field_id('post-author'); ?>" name="<?php echo $this->get_field_name('post-author'); ?>" /> 
+                <label for="<?php echo $this->get_field_id('post-author'); ?>">Display Name of the Author</label>
+        </p>
+        <p>
                 <input class="checkbox" type="checkbox" <?php checked($instance['post-category'], 'on'); ?> id="<?php echo $this->get_field_id('post-category'); ?>" name="<?php echo $this->get_field_name('post-category'); ?>" /> 
                 <label for="<?php echo $this->get_field_id('post-category'); ?>">Display Post Category</label>
         </p>
@@ -63,14 +67,7 @@ function form($instance) {
         <p>
                 <input class="checkbox" type="checkbox" <?php checked($instance['post-excerpt'], 'on'); ?> id="<?php echo $this->get_field_id('post-excerpt'); ?>" name="<?php echo $this->get_field_name('post-excerpt'); ?>" /> 
                 <label for="<?php echo $this->get_field_id('post-excerpt'); ?>">Display Post Excerpt</label>
-        </p>
-        
-        <p>
-                <input class="checkbox" type="checkbox" <?php checked($instance['post-author'], 'on'); ?> id="<?php echo $this->get_field_id('post-author'); ?>" name="<?php echo $this->get_field_name('post-author'); ?>" /> 
-                <label for="<?php echo $this->get_field_id('post-author'); ?>">Display Name of the Author</label>
-        </p>
-        
-        
+        </p>                                
 <?php }
 function update($new_instance,$old_instance){
     $instance = $old_instance;
@@ -104,7 +101,7 @@ function update($new_instance,$old_instance){
 
 function widget($args, $instance) {
         $title = apply_filters('widget_title', $instance['title']);
-        $post_count=$instance['post_count'];
+        $post_count= apply_filters('widget_title', $instance['post_count']);
         global $author_id;
         // Display the widget title
         echo "<div class='auth-widget'>";
@@ -121,9 +118,9 @@ function widget($args, $instance) {
                 );
             $asc_list = new WP_Query($args);
             if($asc_list->have_posts()) { echo "<ul>"; }
-                while ( $asc_list->have_posts() ) : $asc_list->the_post();                                     
+                while ( $asc_list->have_posts() ) : $asc_list->the_post();                    
                     echo "<div class='post-title'>";    
-                        echo '<li><a href="'.get_permalink().'">'.the_title('', '', false);           
+                        echo '<li><a href="'.get_permalink().'">'.the_title('', '', false); 
                         if($instance['featured-image']){
                             echo"<div class='featured-image'>";
                                 if (has_post_thumbnail()){
@@ -148,11 +145,10 @@ function widget($args, $instance) {
                 }          
             if(function_exists("display_post_author_name")){
                 echo "<div class = 'post-by'>";
-                    if($instance['post-author']){
-                        echo "By:"; 
+                    if($instance['post-author']){                        
                         display_post_author_name();
+                        echo"<div class='author-gravatar'>".'<a href=' .get_author_posts_url(get_the_author_meta('ID')).'">'.get_avatar(get_the_author_meta('ID'),100).'</a>'."</div>";
                     }
-                    echo"<div class='author-gravatar'>".'<a href=' .get_author_posts_url(get_the_author_meta('ID')).'">'.get_avatar(get_the_author_meta('ID'),100).'</a>'."</div>";
                 echo "</div>";
              }         
             if ($instance['post-category']){
@@ -196,7 +192,7 @@ function widget($args, $instance) {
                         );
             $asc_list = new WP_Query($args);
             if($asc_list->have_posts()) { echo "<ul>"; }
-                while ( $asc_list->have_posts() ) : $asc_list->the_post();                                     
+                while ( $asc_list->have_posts() ) : $asc_list->the_post();                             
                     echo "<div class='post-title'>";    
                         echo '<li><a href="'.get_permalink().'">'.the_title('', '', false);
                             if($instance['featured-image']){
@@ -224,10 +220,9 @@ function widget($args, $instance) {
             if(function_exists("display_post_author_name")){
                 echo "<div class = 'post-by'>";
                     if($instance['post-author']){
-                        echo "By:"; 
                         display_post_author_name();
+                        echo"<div class='author-gravatar'>".'<a href=' .get_author_posts_url(get_the_author_meta('ID')).'">'.get_avatar(get_the_author_meta('ID'),100).'</a>'."</div>";
                     }
-                    echo"<div class='author-gravatar'>".'<a href=' .get_author_posts_url(get_the_author_meta('ID')).'">'.get_avatar(get_the_author_meta('ID'),100).'</a>'."</div>";
                 echo "</div>";
              }            
              if ($instance['post-category']){

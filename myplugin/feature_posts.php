@@ -136,7 +136,7 @@ public function widget($args, $instance) {
             echo '<div class="recent-posts">';
             if ( $title )
                 
-                    echo "<h3>$title</h3>";
+                    echo "<h3 class='widget-title'>$title</h3>";
 	//Display the name
                     $args = new WP_Query(
                         array(

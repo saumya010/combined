@@ -85,15 +85,14 @@ function update($new_instance,$old_instance){
 
 function widget($args, $instance) {
             //if (function_exists("wp_recent_post_popularity_list")) {
-	    $post_count = $instance['post_count'];
             $title = apply_filters('widget_title', $instance['title']);
-           
+            $post_count= apply_filters('widget_title', $instance['post_count']);
             echo '<div id="recent-posts">';
-            if ( $title )
-                
-                    echo '<h3 class="widget-header text-center">'.$title.'</h3>';
+            if ( $title ){
+                echo '<h3 class="widget-title">'.$title.'</h3>';
+            }
 	//Display the name
-                    $args = new WP_Query(
+                    $args = 
                         array(
                             "posts_per_page" => $post_count,
                             "post_type" => "post",
@@ -101,47 +100,46 @@ function widget($args, $instance) {
                             "meta_key" => "mp_views",
                             "orderby" => "meta_value_num",
                             "order" => "DESC"
-                           )
+                           
                     );
                     global $post;
-                   
-                    if($args->have_posts()) { echo '<ul class="widget-list">'; }
-                    while ( $args->have_posts() ) : $args->the_post();
-                    echo'<li class="widget-list-item">';
-                    echo '<h4><a href="'.get_permalink($post->ID).'">'.the_title('', '', false).'</a></h4>';
-                    if($instance['your_checkbox_var']){
-                        echo "<br>";
-                        display_featured_image();
-                    }
-                    echo '<div class="widget-right-list">';
-                    if($instance['your_checkbox_var1']){
-                        echo "<strong>Date:  </strong>";
-                        echo the_date('','','',TRUE);
-                    }
-                    if($instance['your_checkbox_var2']){
-                        echo "<br>";
-                        display_post_author_name();
-                    }
-                    if($instance['your_checkbox_var3']){
-                        echo "<br>";
-                        echo "<strong>Category:</strong>";
-                        echo "<br>";
-                        echo get_the_category_list();
-                    }
-                    echo '</div>';
-                    if($instance['your_checkbox_var4']){
-                        echo "<br>";
-                        echo coments_number();
-                    }
-                    if($instance['your_checkbox_var5']){
-                        echo "<br>";
-                        echo "<strong>Excerpt:</strong>";
-                        echo "<br>";
-                        the_excerpt();
-                    }
-                    echo "</li>";
-                    endwhile;
-                    
+                    $list=new WP_Query($args);                    
+                    if($list->have_posts()) {echo '<ul class="widget-list">';}
+                        while ( $list->have_posts() ) : $list->the_post();
+                            echo'<li class="widget-list-item">';                            
+                                echo '<h4><a href="'.get_permalink($post->ID).'">'.the_title('', '', false).'</a></h4>';
+                                if($instance['your_checkbox_var']){
+                                    echo "<br>";
+                                    display_featured_image();
+                                }
+                                echo '<div class="widget-right-list">';
+                                    if($instance['your_checkbox_var1']){
+                                        echo "<strong>Date:  </strong>";
+                                        echo the_date('','','',TRUE);
+                                    }
+                                    if($instance['your_checkbox_var2']){
+                                        echo "<br>";
+                                        display_post_author_name();
+                                    }
+                                    if($instance['your_checkbox_var3']){
+                                        echo "<br>";
+                                        echo "<strong>Category:</strong>";
+                                        echo "<br>";
+                                        echo get_the_category_list();
+                                    }
+                                echo '</div>';
+                                if($instance['your_checkbox_var4']){
+                                    echo "<br>";
+                                    echo coments_number();
+                                }
+                                if($instance['your_checkbox_var5']){
+                                    echo "<br>";
+                                    echo "<strong>Excerpt:</strong>";
+                                    echo "<br>";
+                                    the_excerpt();
+                                }
+                            echo "</li>";
+                        endwhile;                   
                     echo '</div>';
                     
 	}
